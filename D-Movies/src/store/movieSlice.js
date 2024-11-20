@@ -16,7 +16,6 @@ const movieSlice = createSlice({
     initialState,
     reducers: {
         setMovies: (state, action) => {
-            // Combine movies with the same title
             const combinedMovies = action.payload.reduce((acc, movie) => {
                 const existingMovie = acc.find(m => m.title === movie.title);
                 if (existingMovie) {
@@ -195,7 +194,6 @@ export const selectSearchQuery = (state) => state.movies.searchQuery
 export const selectLoading = (state) => state.movies.loading
 export const selectError = (state) => state.movies.error
 
-// Memoized selectors
 export const selectPaginatedMovies = createSelector(
     [selectMoviesState],
     (moviesState) => {

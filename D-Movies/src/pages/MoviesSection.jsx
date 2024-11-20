@@ -47,7 +47,6 @@ export default function MoviesSection() {
     return (
         <section className="min-h-screen bg-white snap-start px-6 py-12" id="movies">
             <div className="max-w-7xl mx-auto">
-                {/* Search Input with red border */}
                 <div className="relative max-w-md mb-8">
                     <Input
                         type="text"
@@ -59,7 +58,6 @@ export default function MoviesSection() {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-red-500" />
                 </div>
 
-                {/* Categories Filter */}
                 <div className="flex flex-wrap gap-2 mb-8">
                     {availableCategories.map((category) => (
                         <Button
@@ -79,7 +77,6 @@ export default function MoviesSection() {
                     ))}
                 </div>
 
-                {/* Movies Grid */}
                 <motion.div
                     layout
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
@@ -99,7 +96,6 @@ export default function MoviesSection() {
                                         <h3 className="font-semibold text-lg mb-2">{movie.title}</h3>
                                         <p className="text-gray-600 mb-4">{movie.category}</p>
 
-                                        {/* Like/Dislike Section */}
                                         <div className="flex justify-between mb-4">
                                             <Button
                                                 size="sm"
@@ -132,8 +128,6 @@ export default function MoviesSection() {
                                                 <span className="font-medium">{movie.dislikes}</span>
                                             </Button>
                                         </div>
-
-                                        {/* Delete Button */}
                                         <Button
                                             variant="destructive"
                                             className="w-full bg-red-500 hover:bg-red-600 text-white transition-colors duration-300"
@@ -148,14 +142,12 @@ export default function MoviesSection() {
                     </AnimatePresence>
                 </motion.div>
 
-                {/* No movies found message */}
                 {paginatedMovies.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                         No movies found matching your criteria
                     </div>
                 )}
 
-                {/* Pagination */}
                 {filteredMovies.length > 0 && (
                     <div className="flex justify-center items-center gap-4 mt-12">
                         <Button
