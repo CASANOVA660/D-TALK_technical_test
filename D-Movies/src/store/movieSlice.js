@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createSelector } from '@reduxjs/toolkit'
 
 const initialState = {
     movies: [],
@@ -16,19 +16,27 @@ const movieSlice = createSlice({
     initialState,
     reducers: {
         setMovies: (state, action) => {
-            state.movies = action.payload.map(movie => ({
-                ...movie,
-                hasLiked: false,
-                hasDisliked: false,
-                likes: movie.likes || 0,
-                dislikes: movie.dislikes || 0
-            }))
-            state.filteredMovies = state.movies
-            state.loading = false
-        },
+            // Combine movies with the same title
+            const combinedMovies = action.payload.reduce((acc, movie) => {
+                const existingMovie = acc.find(m => m.title === movie.title);
+                if (existingMovie) {
+                    existingMovie.likes += movie.likes || 0;
+                    existingMovie.dislikes += movie.dislikes || 0;
+                } else {
+                    acc.push({
+                        ...movie,
+                        hasLiked: false,
+                        hasDisliked: false,
+                        likes: movie.likes || 0,
+                        dislikes: movie.dislikes || 0
+                    });
+                }
+                return acc;
+            }, []);
 
-        setLoading: (state, action) => {
-            state.loading = action.payload
+            state.movies = combinedMovies;
+            state.filteredMovies = combinedMovies;
+            state.loading = false;
         },
 
         setError: (state, action) => {
@@ -177,6 +185,7 @@ export const {
     resetFilters
 } = movieSlice.actions
 
+export const selectMoviesState = (state) => state.movies
 export const selectAllMovies = (state) => state.movies.movies
 export const selectFilteredMovies = (state) => state.movies.filteredMovies
 export const selectSelectedCategories = (state) => state.movies.selectedCategories
@@ -186,14 +195,19 @@ export const selectSearchQuery = (state) => state.movies.searchQuery
 export const selectLoading = (state) => state.movies.loading
 export const selectError = (state) => state.movies.error
 
-export const selectPaginatedMovies = (state) => {
-    const { filteredMovies, currentPage, itemsPerPage } = state.movies
-    const startIndex = (currentPage - 1) * itemsPerPage
-    return filteredMovies.slice(startIndex, startIndex + itemsPerPage)
-}
+// Memoized selectors
+export const selectPaginatedMovies = createSelector(
+    [selectMoviesState],
+    (moviesState) => {
+        const { filteredMovies, currentPage, itemsPerPage } = moviesState
+        const startIndex = (currentPage - 1) * itemsPerPage
+        return filteredMovies.slice(startIndex, startIndex + itemsPerPage)
+    }
+)
 
-export const selectAvailableCategories = (state) => {
-    return [...new Set(state.movies.movies.map(movie => movie.category))]
-}
+export const selectAvailableCategories = createSelector(
+    [selectAllMovies],
+    (movies) => [...new Set(movies.map(movie => movie.category))]
+)
 
 export default movieSlice.reducer

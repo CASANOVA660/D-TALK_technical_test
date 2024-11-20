@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ThumbsUp, ThumbsDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import {
@@ -12,12 +13,20 @@ import {
     selectSelectedCategories,
     selectSearchQuery
 } from '../store/movieSlice'
+import { setMovies } from '../store/movieSlice'
+import { movies$ } from '../data/movies'
 import { Button } from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { Input } from '../components/ui/Input'
 
 export default function MoviesSection() {
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        movies$.then(movies => {
+            dispatch(setMovies(movies))
+        })
+    }, [dispatch])
 
     const paginatedMovies = useSelector(selectPaginatedMovies)
     const availableCategories = useSelector(selectAvailableCategories)
