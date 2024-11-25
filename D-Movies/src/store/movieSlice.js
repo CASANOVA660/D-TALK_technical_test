@@ -90,48 +90,67 @@ const movieSlice = createSlice({
         },
 
         toggleLike: (state, action) => {
-            const { id, type } = action.payload
-            const movie = state.movies.find(m => m.id === id)
-            const filteredMovie = state.filteredMovies.find(m => m.id === id)
+            const { id, type } = action.payload;
+            const movie = state.movies.find((m) => m.id === id);
+            const filteredMovie = state.filteredMovies.find((m) => m.id === id);
 
             if (movie) {
-                if (type === 'like') {
+                if (type === "like") {
                     if (movie.hasLiked) {
-                        movie.likes--
-                        movie.hasLiked = false
+                        movie.likes--;
+                        movie.hasLiked = false;
+
                         if (filteredMovie) {
-                            filteredMovie.likes--
-                            filteredMovie.hasLiked = false
+                            filteredMovie.likes--;
+                            filteredMovie.hasLiked = false;
+                        }
+                    } else {
+                        if (movie.hasDisliked) {
+                            movie.dislikes--;
+                            movie.hasDisliked = false;
+                        }
+                        movie.likes++;
+                        movie.hasLiked = true;
+
+                        if (filteredMovie) {
+                            if (filteredMovie.hasDisliked) {
+                                filteredMovie.dislikes--;
+                                filteredMovie.hasDisliked = false;
+                            }
+                            filteredMovie.likes++;
+                            filteredMovie.hasLiked = true;
                         }
                     }
-                    else if (!movie.hasDisliked) {
-                        movie.likes++
-                        movie.hasLiked = true
-                        if (filteredMovie) {
-                            filteredMovie.likes++
-                            filteredMovie.hasLiked = true
-                        }
-                    }
-                } else if (type === 'dislike') {
+                } else if (type === "dislike") {
                     if (movie.hasDisliked) {
-                        movie.dislikes--
-                        movie.hasDisliked = false
+                        movie.dislikes--;
+                        movie.hasDisliked = false;
+
                         if (filteredMovie) {
-                            filteredMovie.dislikes--
-                            filteredMovie.hasDisliked = false
+                            filteredMovie.dislikes--;
+                            filteredMovie.hasDisliked = false;
                         }
-                    }
-                    else if (!movie.hasLiked) {
-                        movie.dislikes++
-                        movie.hasDisliked = true
+                    } else {
+                        if (movie.hasLiked) {
+                            movie.likes--;
+                            movie.hasLiked = false;
+                        }
+                        movie.dislikes++;
+                        movie.hasDisliked = true;
+
                         if (filteredMovie) {
-                            filteredMovie.dislikes++
-                            filteredMovie.hasDisliked = true
+                            if (filteredMovie.hasLiked) {
+                                filteredMovie.likes--;
+                                filteredMovie.hasLiked = false;
+                            }
+                            filteredMovie.dislikes++;
+                            filteredMovie.hasDisliked = true;
                         }
                     }
                 }
             }
         },
+
 
         deleteMovie: (state, action) => {
             const movieId = action.payload

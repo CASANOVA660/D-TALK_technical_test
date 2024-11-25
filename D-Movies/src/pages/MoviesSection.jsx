@@ -101,11 +101,10 @@ export default function MoviesSection() {
                                                 size="sm"
                                                 variant="ghost"
                                                 onClick={() => handleRating(movie.id, 'like')}
-                                                disabled={movie.hasDisliked}
                                                 className={`flex items-center gap-2 ${movie.hasLiked
                                                     ? 'text-green-600 bg-green-50'
                                                     : movie.hasDisliked
-                                                        ? 'opacity-50 cursor-not-allowed'
+                                                        ? ''
                                                         : 'hover:bg-green-50 hover:text-green-600'
                                                     }`}
                                             >
@@ -116,11 +115,10 @@ export default function MoviesSection() {
                                                 size="sm"
                                                 variant="ghost"
                                                 onClick={() => handleRating(movie.id, 'dislike')}
-                                                disabled={movie.hasLiked}
                                                 className={`flex items-center gap-2 ${movie.hasDisliked
                                                     ? 'text-red-600 bg-red-50'
                                                     : movie.hasLiked
-                                                        ? 'opacity-50 cursor-not-allowed'
+                                                        ? ''
                                                         : 'hover:bg-red-50 hover:text-red-600'
                                                     }`}
                                             >
